@@ -3,9 +3,8 @@ import UIKit
 
 class MasterViewController: UITableViewController {
     
-    @IBOutlet weak var cells: UITableView!
-    
     var dateShow = true
+    var width : CGFloat = 100
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -15,10 +14,8 @@ class MasterViewController: UITableViewController {
         let settingsButton = UIBarButtonItem(title: "Параметри", style: UIBarButtonItemStyle.Plain, target: self, action: "goToSettings")
         self.navigationItem.leftBarButtonItem = settingsButton
         
-        Diary.recordsDatebase = loadDiary()
-        title = Diary.recordsDatebaseGrouped[0]?.count.description
-        
-        dateShow = loadSetting("dateShow")
+        Diary.loadDiary()
+        //title = Diary.lastSortUpdate.description
     }
     
     func goToSettings() {
@@ -27,44 +24,15 @@ class MasterViewController: UITableViewController {
     
     override func viewWillAppear(animated: Bool) {
         dateShow = loadSetting("dateShow")
-        cells.reloadData()
-    }
-    
-    /*func insertNewObject(sender: AnyObject) {
-        Diary.recordsDatebase.insert(Diary(title: "", tags: 0, text: ""), atIndex: 0)
-        let indexPath = NSIndexPath(forRow: 0, inSection: 0)
-        tableView.insertRowsAtIndexPaths([indexPath], withRowAnimation: .Automatic)
         tableView.reloadData()
-    }*/
-    
-    /*func insertNewObject(sender: AnyObject) {
-        let newRecord = Diary(title: "", tags: 0, text: "")
-        Diary.recordsDatebase.insert(newRecord, atIndex: 0)
-        let indexPath = NSIndexPath(forRow: 0, inSection: 0)
-        tableView.insertRowsAtIndexPaths([indexPath], withRowAnimation: .Automatic)
-    }*/
-    
-    func indexPathOfRecord(record: Diary, inDictionary: [Int: [Diary]]) -> NSIndexPath? {
-        for (i, array) in inDictionary {
-            for j in 0..<array.count {
-                if array[j] === record {
-                    return NSIndexPath(forRow: j, inSection: i)
-                }
-            }
-        }
-        
-        return nil
-        
-    
     }
+    
+    // MARK: - Add new object 
     
     func insertNewObject(sender: AnyObject) {
         let newRecord = Diary(title: "", tags: 0, text: "")
-        Diary.recordsDatebase.insert(newRecord, atIndex: 0)
-        if let indexPath = indexPathOfRecord(newRecord, inDictionary: Diary.recordsDatebaseGrouped) {
-            tableView.insertRowsAtIndexPaths([indexPath], withRowAnimation: .Automatic)
-        }
-        tableView.reloadData()
+        Diary.insertObject(newRecord, section : 0, index: 0)
+        tableView.insertRowsAtIndexPaths([NSIndexPath(forRow: 0, inSection: 0)], withRowAnimation: .Automatic)
     }
     
     // MARK: - Segues
@@ -72,13 +40,10 @@ class MasterViewController: UITableViewController {
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         if segue.identifier == "showDetail" {
             if let indexPath = self.tableView.indexPathForSelectedRow {
-                let section = indexPath.section
-                let array  = Diary.recordsDatebaseGrouped[section]
                 let controller = segue.destinationViewController as! DetailViewController
-                if array?[indexPath.row] != nil {
-                    controller.record = array![indexPath.row]
-                    controller.navigationItem.leftItemsSupplementBackButton = true
-                }
+                controller.record = Diary.returnObject(indexPath.section, index: indexPath.row)
+                controller.idexPath = indexPath
+                controller.navigationItem.leftItemsSupplementBackButton = true
             }
         }
     }
@@ -86,40 +51,64 @@ class MasterViewController: UITableViewController {
     // MARK: - Table View
     
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
-        return Diary.recordsDatebaseGrouped.count
+        return 3
     }
     
     override func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        switch section {
-        case 0 : return "Сьогодні"
-        case 1 : return "Вчора"
-        case 2 : return "Цього тижня"
-        case 3 : return "Раніше"
-        default : return ""
+        if Diary.datebase.count <= 1 {
+            return nil
         }
+        if let _ = Diary.datebase[section] {
+            switch section {
+            case 0 : return "Сьогодні"
+            case 1 : return "Цього тижня"
+            case 2 : return "Раніше"
+            default : return nil
+            }
+        }
+        return nil
     }
     
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if let result = Diary.recordsDatebaseGrouped[section]?.count {
-            return result
+        if let result = Diary.datebase[section] {
+            return result.count
         }
         return 0
     }
     
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("Cell", forIndexPath: indexPath)
-        //let section = indexPath.section
-        let array  = Diary.recordsDatebaseGrouped[indexPath.section]
-        let object = array![indexPath.row]
-        cell.textLabel!.text = (object.title.isEmpty ? "Без заголовку" : object.title)
-        cell.detailTextLabel!.text = dateShow ? object.dateFormat.0 :  ""
+        let cell = tableView.dequeueReusableCellWithIdentifier("Cell", forIndexPath: indexPath) as! MasterTableViewCell
+        let object = Diary.returnObject(indexPath.section, index: indexPath.row)
+        //cell.title.numberOfLines = 0
+        cell.title.text = (object!.title.isEmpty ? "Без заголовку" : object!.title)
+
+        //var a = cell.title.frame
+        //a.size = CGSize(width: 2000000, height: 1)
+        //cell.title.frame = a
+
+        cell.date.text = dateShow ? object?.date.printTime() :  ""
+        switch object!.tags {
+            case 0 : cell.tags.image = UIImage(named: "sunny")
+            case 1 : cell.tags.image = UIImage(named: "cloudy")
+            case 2 : cell.tags.image = UIImage(named: "rain")
+            default : break
+        }
         return cell
     }
     
+    /*override func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+        //let cell = tableView.dequeueReusableCellWithIdentifier("Cell", forIndexPath: indexPath) as! MasterTableViewCell
+        //let newSize = cell.title.sizeThatFits(CGSize(width: width, height: CGFloat.max))
+        //var newFrame = cell.title.frame
+        //newFrame.size = CGSize(width: max(newSize.width, width), height: newSize.height)
+        return 200 
+    }*/
+    
     override func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
-        Diary.recordsDatebase.removeAtIndex(indexPath.row)
-        tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Fade)
+        if let _ = Diary.returnObject(indexPath.section, index: indexPath.row) {
+            Diary.datebase[indexPath.section]!.removeAtIndex(indexPath.row)
+            tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Fade)
+        }
     }
     
 }
-

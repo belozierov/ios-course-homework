@@ -65,4 +65,3 @@ class SettingViewController: UITableViewController {
     }
     
 }
-

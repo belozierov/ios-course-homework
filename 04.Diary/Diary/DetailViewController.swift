@@ -11,20 +11,22 @@ class DetailViewController: UITableViewController, UITextViewDelegate {
         backgroundShow()
     }
     
-    var cell1 : CGFloat = 50
-    var cell2 : CGFloat = 16
-    var cell3 : CGFloat = 16
-    var width : CGFloat = 304
+    var titleHeight : CGFloat = 16
+    var textHeight : CGFloat = 16
+    var width : CGFloat = 0
+    var idexPath : NSIndexPath?
     
     var record: Diary?
     var backgroundEnable = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
+
+        let rightButton = UIBarButtonItem(title: "Дата", style: UIBarButtonItemStyle.Plain, target: self, action: "datePicker")
+        self.navigationItem.rightBarButtonItem = rightButton
         
+        width = UIScreen.mainScreen().bounds.width - 16
         tableView.separatorStyle = UITableViewCellSeparatorStyle.None
-        let (date, _) = record!.dateFormat
-        title = date
 
         tagRecord.setImage(UIImage(named: "sunny"), forSegmentAtIndex: 0)
         tagRecord.setImage(UIImage(named: "cloudy"), forSegmentAtIndex: 1)
@@ -36,12 +38,23 @@ class DetailViewController: UITableViewController, UITextViewDelegate {
         placeholderForObject(titleRecord, saveText: false, placeholderEnable: true)
         placeholderForObject(textRecord, saveText: false, placeholderEnable: true)
         
-        cell2 += newTableViewCellSize(titleRecord).height
-        cell3 += newTableViewCellSize(textRecord).height
+        titleHeight += newTableViewCellSize(titleRecord).height
+        textHeight += newTableViewCellSize(textRecord).height
         
         tagRecord.selectedSegmentIndex = (record?.tags)!
         textRecord.delegate = self
         titleRecord.delegate = self
+    }
+    
+    func datePicker() {
+         performSegueWithIdentifier("datePicker", sender: self)
+    }
+    
+    override func viewWillAppear(animated: Bool) {
+        let formatter = NSDateFormatter()
+        formatter.dateStyle = .ShortStyle
+        formatter.timeStyle = .ShortStyle
+        title = formatter.stringFromDate((record?.date)!)
     }
     
     // MARK: - UIViewController background
@@ -57,6 +70,15 @@ class DetailViewController: UITableViewController, UITextViewDelegate {
         }
     }
     
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        if segue.identifier == "datePicker" {
+            let controller = (segue.destinationViewController as! UINavigationController).topViewController as! DatePickerViewController
+            controller.object = record
+            controller.indexPath = idexPath
+            controller.navigationItem.leftItemsSupplementBackButton = true
+        }
+    }
+    
     // MARK: - UITextView placeholders
     
     func placeholderForObject(object: UITextView, saveText: Bool, placeholderEnable: Bool) {
@@ -67,7 +89,7 @@ class DetailViewController: UITableViewController, UITextViewDelegate {
             if saveText { record?.text = object.text }
             value = (record?.text)!
         }
-        else if object === titleRecord {
+        else if object === titleRecord { 
             placeholder = "Введіть заголовок"
             if saveText { record?.title = object.text }
             value = (record?.title)!
@@ -98,16 +120,17 @@ class DetailViewController: UITableViewController, UITextViewDelegate {
             textView.frame = newFrame
             
             if textView === titleRecord {
-                cell2 = newFrame.height + 16
+                titleHeight = newFrame.height + 16
             }
             
             if textView === textRecord {
-                cell3 = newFrame.height + 16
+                textHeight = newFrame.height + 16
             }
             
             tableView?.beginUpdates()
             tableView?.endUpdates()
         }
+        
     }
     
     func newTableViewCellSize(textView: UITextView) -> CGRect {
@@ -118,13 +141,24 @@ class DetailViewController: UITableViewController, UITextViewDelegate {
     }
     
     override func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
-        let section = indexPath.section
-        let row = indexPath.row
-        switch (section, row) {
-            case (1, 0) : return cell2
-            case (2, 0) : return cell3
-            default : return cell1
+        switch indexPath.section {
+        case 1 : return titleHeight
+        case 2 : return textHeight
+        default : return 50
         }
+    }
+    
+    func textView(textView: UITextView, shouldChangeTextInRange range: NSRange, replacementText text: String) -> Bool {
+        if text == "\n"
+        {
+            switch textView {
+            case titleRecord : textRecord.becomeFirstResponder()
+            case textRecord : textView.resignFirstResponder()
+            default : break
+            }
+            return false
+        }
+        return true
     }
     
 }
