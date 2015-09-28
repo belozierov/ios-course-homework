@@ -36,31 +36,37 @@ class Diary : NSObject, NSCoding {
                     }*/
                 } else {
                     Diary.datebase[section + 1] = sectionArray
+                    Diary.datebase[section] = []
                 }
             }
         }
     }
     
-    func updatePlaceInDatebase (indexPath: NSIndexPath) {
+    func updatePlaceInDatebase (var indexPath: NSIndexPath) {
         let object = self
         Diary.datebase[indexPath.section]!.removeAtIndex(indexPath.row)
         let newSection = object.recordSection
+        let indexPathSection = newSection
+        var indexPathRow = 0
         let objectDateIntervalSince1970 = object.date.timeIntervalSince1970
         if let array = Diary.datebase[newSection] {
             var insert = false
             for (index, value) in array.enumerate() {
                 if value.date.timeIntervalSince1970 < objectDateIntervalSince1970 {
                     Diary.insertObject(object, section: newSection, index: index)
+                    indexPathRow = index
                     insert = true
                     break
                 }
             }
             if !insert {
                 Diary.insertObject(object, section: newSection, index: array.count)
+                indexPathRow = array.count
             }
         } else {
             Diary.datebase[newSection] = [object]
         }
+        //indexPath = NSIndexPath(forRow: indexPathRow, inSection: indexPathSection)
     }
     
     // MARK: - Return/insert records
