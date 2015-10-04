@@ -1,32 +1,35 @@
 
 import UIKit
 
-class MasterViewController: UITableViewController, UISearchResultsUpdating {
+class MasterViewController: UITableViewController, UISearchResultsUpdating, UISearchBarDelegate {
     
     var dateShow = true
     var cacheDatabase = diary
     var moodIndex = 0
     var searchController: UISearchController!
-    var showSearchBar = true
     var resultsTableController : MasterViewController?
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        if showSearchBar {
-            let addButton = UIBarButtonItem(barButtonSystemItem: .Add, target: self, action: "insertNewObject:")
-            self.navigationItem.rightBarButtonItem = addButton
-            resultsTableController = storyboard!.instantiateViewControllerWithIdentifier("MasterViewController") as? MasterViewController
-            resultsTableController?.showSearchBar = false
-            searchController = UISearchController(searchResultsController: resultsTableController)
-            searchController.searchResultsUpdater = self
-            tableView.tableHeaderView = searchController.searchBar
-            definesPresentationContext = true
-        }
+        let addButton = UIBarButtonItem(barButtonSystemItem: .Add, target: self, action: "insertNewObject:")
+        self.navigationItem.rightBarButtonItem = addButton
+        let searchButton = UIBarButtonItem(title: "Пошук", style: UIBarButtonItemStyle.Plain, target: self, action: "showSearchBarController")
+        self.navigationItem.leftBarButtonItem = searchButton
     }
     
     override func viewWillAppear(animated: Bool) {
         dateShow = loadSetting("dateShow")
         tableView.reloadData()
+    }
+    
+    func showSearchBarController() {
+        resultsTableController = storyboard!.instantiateViewControllerWithIdentifier("MasterViewController") as? MasterViewController
+        searchController = UISearchController(searchResultsController: resultsTableController)
+        searchController.searchResultsUpdater = self
+        searchController.searchBar.delegate = self
+        definesPresentationContext = true
+        tableView.tableHeaderView = searchController.searchBar
+        searchController.searchBar.becomeFirstResponder()
     }
     
     // MARK: - Add new object 
@@ -101,6 +104,10 @@ class MasterViewController: UITableViewController, UISearchResultsUpdating {
         result.database = diary.filterDatebaseByText(searchKey)
         resultsTableController?.cacheDatabase = result
         resultsTableController!.tableView.reloadData()
+    }
+    
+    func searchBarCancelButtonClicked(searchBar: UISearchBar) {
+        tableView.tableHeaderView = nil
     }
     
 }

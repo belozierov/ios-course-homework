@@ -23,7 +23,6 @@ class PageViewController: UIPageViewController, UIPageViewControllerDataSource {
     
     private func viewControllerAtIndex(index: Int) -> UIViewController! {
         let viewController = storyboard!.instantiateViewControllerWithIdentifier("MasterViewController") as! MasterViewController
-        viewController.showSearchBar = false
         viewController.moodIndex = index
         viewController.cacheDatabase = Diary()
         /*if let cacheDatabase = dataFilterDatebaseByMoodCache.objectForKey(index) where !diary.needToRefilter {
