@@ -17,7 +17,7 @@ class MasterViewController: UITableViewController, UISearchResultsUpdating, UISe
         navigationItem.leftBarButtonItem = searchButton
         
         tableView.estimatedRowHeight = 44
-        tableView.rowHeight = UITableViewAutomaticDimension
+        //tableView.rowHeight = UITableViewAutomaticDimension
         tableView.setNeedsLayout()
         tableView.layoutIfNeeded()
     }
@@ -32,6 +32,7 @@ class MasterViewController: UITableViewController, UISearchResultsUpdating, UISe
         searchController = UISearchController(searchResultsController: resultsTableController)
         searchController.searchResultsUpdater = self
         searchController.searchBar.delegate = self
+        definesPresentationContext = true
         tableView.tableHeaderView = searchController.searchBar
         searchController.searchBar.becomeFirstResponder()
     }
@@ -59,11 +60,11 @@ class MasterViewController: UITableViewController, UISearchResultsUpdating, UISe
     // MARK: - Table View
     
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
-        return cacheDatabase.database.count
+        return 3
     }
     
     override func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        if cacheDatabase.database[section]?.count != 0 {
+        if let sectionDatabase = cacheDatabase.database[section] where sectionDatabase != [] {
             switch section {
             case 0 : return "Сьогодні"
             case 1 : return "Цього тижня"

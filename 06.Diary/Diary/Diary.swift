@@ -88,12 +88,10 @@ class Diary {
     }
     
     func loadDiary() {
-        diary.database = [Int :[Record]]()
-        if let url = diary.localDataURL,
-        let data = NSData(contentsOfURL: url),
-        let dataBase = NSKeyedUnarchiver.unarchiveObjectWithData(data) as? [Int :[Record]]{
+        //diary.database = [Int :[Record]]()
+        if let url = diary.localDataURL, let data = NSData(contentsOfURL: url),
+        let dataBase = NSKeyedUnarchiver.unarchiveObjectWithData(data) as? [Int :[Record]] {
             diary.database = dataBase
-            //diary.database = [Int :[Record]]()
         }
         let defaults = NSUserDefaults.standardUserDefaults()
         if let lastSortUpdate = defaults.objectForKey("lastSortUpdate") as? NSData,
@@ -106,7 +104,7 @@ class Diary {
     lazy private var localDataURL: NSURL? = {
         do {
             let url = try NSFileManager.defaultManager().URLForDirectory(NSSearchPathDirectory.DocumentDirectory, inDomain: NSSearchPathDomainMask.UserDomainMask, appropriateForURL: nil, create: true)
-            return url.URLByAppendingPathComponent("Datebase.data")
+            return url.URLByAppendingPathComponent("Diary.data")
         } catch { return nil }
         }()
 }

@@ -251,7 +251,7 @@
                                             <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                             <nil key="highlightedColor"/>
                                         </label>
-                                        <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="oee-2x-evc">
+                                        <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="oee-2x-evc">
                                             <rect key="frame" x="546" y="11" width="25" height="22"/>
                                             <animations/>
                                             <constraints>
@@ -272,7 +272,7 @@
                                     <animations/>
                                     <constraints>
                                         <constraint firstItem="c4H-oM-R4b" firstAttribute="leading" secondItem="37f-cq-3Eg" secondAttribute="leadingMargin" constant="12" id="7sQ-R3-cIb"/>
-                                        <constraint firstItem="oee-2x-evc" firstAttribute="leading" secondItem="c4H-oM-R4b" secondAttribute="trailing" constant="14" id="K8L-jy-XVn"/>
+                                        <constraint firstItem="oee-2x-evc" firstAttribute="centerY" secondItem="37f-cq-3Eg" secondAttribute="centerY" id="IgP-Mw-O0U"/>
                                         <constraint firstAttribute="bottomMargin" secondItem="c4H-oM-R4b" secondAttribute="bottom" constant="7.5" id="QKX-lr-3Hg"/>
                                         <constraint firstItem="oee-2x-evc" firstAttribute="top" secondItem="37f-cq-3Eg" secondAttribute="topMargin" constant="3" id="RwE-Jv-wQH"/>
                                         <constraint firstItem="c4H-oM-R4b" firstAttribute="top" secondItem="37f-cq-3Eg" secondAttribute="topMargin" id="Vly-0I-8Pj"/>
@@ -281,12 +281,13 @@
                                         <constraint firstItem="oee-2x-evc" firstAttribute="centerY" secondItem="37f-cq-3Eg" secondAttribute="centerY" id="ew4-oD-Rb5"/>
                                         <constraint firstItem="1pc-Jb-gDz" firstAttribute="top" secondItem="37f-cq-3Eg" secondAttribute="topMargin" constant="18" id="inU-XU-Lom"/>
                                         <constraint firstAttribute="bottomMargin" secondItem="1pc-Jb-gDz" secondAttribute="bottom" constant="-4.5" id="mkw-JG-s2D"/>
-                                        <constraint firstItem="oee-2x-evc" firstAttribute="centerY" secondItem="37f-cq-3Eg" secondAttribute="centerY" id="uWL-nw-9Fd"/>
                                     </constraints>
                                     <variation key="default">
                                         <mask key="constraints">
                                             <exclude reference="inU-XU-Lom"/>
+                                            <exclude reference="RwE-Jv-wQH"/>
                                             <exclude reference="cDR-22-1gb"/>
+                                            <exclude reference="ew4-oD-Rb5"/>
                                         </mask>
                                     </variation>
                                 </tableViewCellContentView>
@@ -294,6 +295,7 @@
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <constraints>
                                     <constraint firstAttribute="trailing" secondItem="oee-2x-evc" secondAttribute="trailing" constant="29" id="p8k-Lc-Bwx"/>
+                                    <constraint firstAttribute="trailing" secondItem="c4H-oM-R4b" secondAttribute="trailing" constant="68" id="y0k-R8-w0J"/>
                                 </constraints>
                                 <connections>
                                     <outlet property="date" destination="1pc-Jb-gDz" id="I5o-Vn-2zN"/>
