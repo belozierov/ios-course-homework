@@ -17,7 +17,6 @@ class MasterViewController: UITableViewController, UISearchResultsUpdating, UISe
         navigationItem.leftBarButtonItem = searchButton
         
         tableView.estimatedRowHeight = 44
-        //tableView.rowHeight = UITableViewAutomaticDimension
         tableView.setNeedsLayout()
         tableView.layoutIfNeeded()
     }
