@@ -12,9 +12,14 @@ class MasterViewController: UITableViewController, UISearchResultsUpdating, UISe
     override func viewDidLoad() {
         super.viewDidLoad()
         let addButton = UIBarButtonItem(barButtonSystemItem: .Add, target: self, action: "insertNewObject:")
-        self.navigationItem.rightBarButtonItem = addButton
+        navigationItem.rightBarButtonItem = addButton
         let searchButton = UIBarButtonItem(title: "Пошук", style: UIBarButtonItemStyle.Plain, target: self, action: "showSearchBarController")
-        self.navigationItem.leftBarButtonItem = searchButton
+        navigationItem.leftBarButtonItem = searchButton
+        
+        tableView.estimatedRowHeight = 44
+        tableView.rowHeight = UITableViewAutomaticDimension
+        tableView.setNeedsLayout()
+        tableView.layoutIfNeeded()
     }
     
     override func viewWillAppear(animated: Bool) {
@@ -27,7 +32,6 @@ class MasterViewController: UITableViewController, UISearchResultsUpdating, UISe
         searchController = UISearchController(searchResultsController: resultsTableController)
         searchController.searchResultsUpdater = self
         searchController.searchBar.delegate = self
-        definesPresentationContext = true
         tableView.tableHeaderView = searchController.searchBar
         searchController.searchBar.becomeFirstResponder()
     }
@@ -80,8 +84,10 @@ class MasterViewController: UITableViewController, UISearchResultsUpdating, UISe
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier("Cell", forIndexPath: indexPath) as! MasterTableViewCell
         let object = cacheDatabase[indexPath.section, indexPath.row]
+        
         cell.title.text = object!.title.isEmpty ? "Без заголовку" : object!.title
         cell.date.text = dateShow ? object?.date.printTime() :  ""
+        
         switch object!.mood {
             case 0 : cell.mood.image = UIImage(named: "sunny")
             case 1 : cell.mood.image = UIImage(named: "cloudy")

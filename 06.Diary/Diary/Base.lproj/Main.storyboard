@@ -234,47 +234,67 @@
                                     <rect key="frame" x="0.0" y="0.0" width="567" height="43.5"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="1pc-Jb-gDz">
-                                            <rect key="frame" x="20" y="26" width="335" height="14"/>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="1pc-Jb-gDz">
+                                            <rect key="frame" x="20" y="26.5" width="335" height="13.5"/>
                                             <animations/>
                                             <constraints>
-                                                <constraint firstAttribute="width" constant="335" id="Z22-ph-DZH"/>
+                                                <constraint firstAttribute="width" constant="335" id="eg5-8P-qAD"/>
                                             </constraints>
                                             <fontDescription key="fontDescription" type="system" pointSize="11"/>
                                             <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                             <nil key="highlightedColor"/>
                                         </label>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="c4H-oM-R4b">
-                                            <rect key="frame" x="20" y="8" width="434" height="20"/>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="c4H-oM-R4b">
+                                            <rect key="frame" x="20" y="8" width="512" height="20"/>
                                             <animations/>
                                             <fontDescription key="fontDescription" type="system" pointSize="16"/>
                                             <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                             <nil key="highlightedColor"/>
                                         </label>
-                                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="oee-2x-evc">
-                                            <rect key="frame" x="549" y="11" width="22" height="22"/>
+                                        <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="oee-2x-evc">
+                                            <rect key="frame" x="546" y="11" width="25" height="22"/>
                                             <animations/>
                                             <constraints>
-                                                <constraint firstAttribute="width" constant="22" id="aeB-wO-8hF"/>
+                                                <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="22" id="F9m-IA-VC8"/>
+                                                <constraint firstAttribute="height" constant="22" id="PHz-zr-cEw"/>
+                                                <constraint firstAttribute="width" constant="25" id="eq3-pr-BCz"/>
+                                                <constraint firstAttribute="width" constant="22" id="zgy-ex-jwk"/>
                                             </constraints>
+                                            <variation key="default">
+                                                <mask key="constraints">
+                                                    <exclude reference="F9m-IA-VC8"/>
+                                                    <exclude reference="PHz-zr-cEw"/>
+                                                    <exclude reference="zgy-ex-jwk"/>
+                                                </mask>
+                                            </variation>
                                         </imageView>
                                     </subviews>
                                     <animations/>
                                     <constraints>
-                                        <constraint firstItem="oee-2x-evc" firstAttribute="centerY" secondItem="37f-cq-3Eg" secondAttribute="centerY" id="1Q5-LZ-ggd"/>
-                                        <constraint firstAttribute="bottomMargin" secondItem="c4H-oM-R4b" secondAttribute="bottom" constant="7.5" id="2iI-59-EU0"/>
-                                        <constraint firstAttribute="trailing" secondItem="oee-2x-evc" secondAttribute="trailing" constant="-4" id="FEj-Hu-32s"/>
-                                        <constraint firstItem="c4H-oM-R4b" firstAttribute="top" secondItem="37f-cq-3Eg" secondAttribute="topMargin" id="Hbb-BQ-WXp"/>
-                                        <constraint firstItem="c4H-oM-R4b" firstAttribute="leading" secondItem="37f-cq-3Eg" secondAttribute="leadingMargin" constant="12" id="MMG-H8-x2k"/>
-                                        <constraint firstAttribute="bottomMargin" secondItem="1pc-Jb-gDz" secondAttribute="bottom" constant="-4.5" id="SOx-Yz-zG9"/>
-                                        <constraint firstItem="c4H-oM-R4b" firstAttribute="leading" secondItem="1pc-Jb-gDz" secondAttribute="leading" id="U8A-52-xgO"/>
-                                        <constraint firstItem="oee-2x-evc" firstAttribute="leading" secondItem="c4H-oM-R4b" secondAttribute="trailing" constant="95" id="iXA-2Y-Q34"/>
-                                        <constraint firstItem="1pc-Jb-gDz" firstAttribute="top" secondItem="37f-cq-3Eg" secondAttribute="topMargin" constant="18" id="kFd-8M-tNO"/>
-                                        <constraint firstItem="oee-2x-evc" firstAttribute="top" secondItem="37f-cq-3Eg" secondAttribute="topMargin" constant="3" id="u1f-zz-3yw"/>
+                                        <constraint firstItem="c4H-oM-R4b" firstAttribute="leading" secondItem="37f-cq-3Eg" secondAttribute="leadingMargin" constant="12" id="7sQ-R3-cIb"/>
+                                        <constraint firstItem="oee-2x-evc" firstAttribute="leading" secondItem="c4H-oM-R4b" secondAttribute="trailing" constant="14" id="K8L-jy-XVn"/>
+                                        <constraint firstAttribute="bottomMargin" secondItem="c4H-oM-R4b" secondAttribute="bottom" constant="7.5" id="QKX-lr-3Hg"/>
+                                        <constraint firstItem="oee-2x-evc" firstAttribute="top" secondItem="37f-cq-3Eg" secondAttribute="topMargin" constant="3" id="RwE-Jv-wQH"/>
+                                        <constraint firstItem="c4H-oM-R4b" firstAttribute="top" secondItem="37f-cq-3Eg" secondAttribute="topMargin" id="Vly-0I-8Pj"/>
+                                        <constraint firstItem="1pc-Jb-gDz" firstAttribute="leading" secondItem="c4H-oM-R4b" secondAttribute="leading" id="bWi-ce-FSE"/>
+                                        <constraint firstItem="oee-2x-evc" firstAttribute="leading" secondItem="c4H-oM-R4b" secondAttribute="trailing" constant="14" id="cDR-22-1gb"/>
+                                        <constraint firstItem="oee-2x-evc" firstAttribute="centerY" secondItem="37f-cq-3Eg" secondAttribute="centerY" id="ew4-oD-Rb5"/>
+                                        <constraint firstItem="1pc-Jb-gDz" firstAttribute="top" secondItem="37f-cq-3Eg" secondAttribute="topMargin" constant="18" id="inU-XU-Lom"/>
+                                        <constraint firstAttribute="bottomMargin" secondItem="1pc-Jb-gDz" secondAttribute="bottom" constant="-4.5" id="mkw-JG-s2D"/>
+                                        <constraint firstItem="oee-2x-evc" firstAttribute="centerY" secondItem="37f-cq-3Eg" secondAttribute="centerY" id="uWL-nw-9Fd"/>
                                     </constraints>
+                                    <variation key="default">
+                                        <mask key="constraints">
+                                            <exclude reference="inU-XU-Lom"/>
+                                            <exclude reference="cDR-22-1gb"/>
+                                        </mask>
+                                    </variation>
                                 </tableViewCellContentView>
                                 <animations/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstAttribute="trailing" secondItem="oee-2x-evc" secondAttribute="trailing" constant="29" id="p8k-Lc-Bwx"/>
+                                </constraints>
                                 <connections>
                                     <outlet property="date" destination="1pc-Jb-gDz" id="I5o-Vn-2zN"/>
                                     <outlet property="mood" destination="oee-2x-evc" id="C9o-EN-kiz"/>
