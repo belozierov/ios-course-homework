@@ -649,6 +649,9 @@
                                 <segment title="Події"/>
                                 <segment title="Календар"/>
                             </segments>
+                            <connections>
+                                <action selector="switcherChange:" destination="btn-xj-O2W" eventType="valueChanged" id="je8-hV-eBq"/>
+                            </connections>
                         </segmentedControl>
                     </navigationItem>
                     <connections>

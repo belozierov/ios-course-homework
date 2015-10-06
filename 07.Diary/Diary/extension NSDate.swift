@@ -15,7 +15,7 @@ extension NSDate {
         return NSCalendar.currentCalendar().components(.Second, fromDate: self, toDate: NSDate(), options: []).second
     }
     
-    private func dayFrom() -> Int {
+    func dayFrom() -> Int {
         return NSCalendar.currentCalendar().components(.Day, fromDate: self, toDate: NSDate(), options: []).day
     }
     

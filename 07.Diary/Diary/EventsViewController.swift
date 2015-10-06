@@ -4,30 +4,63 @@ import UIKit
 class EventsViewController : UIViewController {
     
     @IBOutlet weak var switcher: UISegmentedControl!
+    @IBAction func switcherChange(sender: UISegmentedControl) {
+        buildCellsForMode(switcher.selectedSegmentIndex)
+    }
 
     var width : CGFloat = 0
-    var count : CGFloat = 0
+    var height : CGFloat = 0
+    var position : CGFloat = 0
+    var day = 0
     
     override func viewDidLoad() {
         super.viewDidLoad()
         width = UIScreen.mainScreen().bounds.width - 16
+        height = UIScreen.mainScreen().bounds.height
         switcher.selectedSegmentIndex = 0
     }
     
     override func viewWillAppear(animated: Bool) {
-        count = 86
-        for (_, section) in diary.database {
-            for record in section {
-                view.addSubview(cellViewForRecord(record, withY: count))
+        buildCellsForMode(switcher.selectedSegmentIndex)
+    }
+    
+    func buildCellsForMode(mode: Int) {
+        
+        deleteAllSubViews()
+        position = 86
+        
+        var array = [Record]()
+        for i in 0...2 {
+            if let arraySection = diary.database[i] {
+                array += arraySection
+            }
+        }
+        
+        if mode == 0 { 
+            for record in array {
+                cellViewForRecord(record, withY: position, showDate: true)
+                if position >= height { break }
+            }
+        } else {
+            day = 0
+            var index = 0
+            while position < height {
+                let tempIndex = index
+                for i in index..<array.count {
+                    if array[i].date.dayFrom() == day {
+                        let showDate = tempIndex == index ? true : false
+                        cellViewForRecord(array[i], withY: position, showDate: showDate)
+                        index++
+                    } else { break }
+                }
+                if tempIndex == index {
+                    emptyCellWithDateAgo(day, withY: position)
+                } else { day++ }
             }
         }
     }
     
-    override func viewWillDisappear(animated: Bool) {
-        deleteAllSubViews()
-    }
-    
-    func cellViewForRecord(record: Record, withY y: CGFloat) -> UIView {
+    func cellViewForRecord(record: Record, withY y: CGFloat, showDate: Bool) {
         
         let containerView = UIView(frame: CGRectMake(8, y, width, 44))
         switch record.mood {
@@ -36,14 +69,16 @@ class EventsViewController : UIViewController {
         default : containerView.tintColor = UIColor.blackColor()
         }
         
-        let dateView = UITextView(frame: CGRectMake(0, -8, 80, 44))
-        let formatterDate = NSDateFormatter()
-        formatterDate.dateStyle = .ShortStyle
-        dateView.text = formatterDate.stringFromDate(record.date)
-        dateView.font = UIFont.systemFontOfSize(16)
-        dateView.userInteractionEnabled = false
-        dateView.textColor = containerView.tintColor
-        containerView.addSubview(dateView)
+        if showDate {
+            let dateView = UITextView(frame: CGRectMake(0, -8, 80, 44))
+            let formatterDate = NSDateFormatter()
+            formatterDate.dateStyle = .ShortStyle
+            dateView.text = formatterDate.stringFromDate(record.date)
+            dateView.font = UIFont.systemFontOfSize(16)
+            dateView.userInteractionEnabled = false
+            dateView.textColor = containerView.tintColor
+            containerView.addSubview(dateView)
+        }
         
         let moodView = UIImageView(frame: CGRectMake(70, 0, 20, 20))
         switch record.mood {
@@ -65,9 +100,25 @@ class EventsViewController : UIViewController {
         containerView.addSubview(titleView)
         
         containerView.frame.size = CGSize(width: width, height: newSize.height)
-        count += newSize.height
+        position += newSize.height
         
-        return containerView
+        view.addSubview(containerView)
+    }
+    
+    func emptyCellWithDateAgo (days: Int, withY y: CGFloat) {
+        
+        let dateView = UITextView(frame: CGRectMake(8, y - 8, 80, 44))
+        let formatterDate = NSDateFormatter()
+        formatterDate.dateStyle = .ShortStyle
+        let date = NSCalendar.currentCalendar().dateByAddingUnit(.Day, value: -days, toDate: NSDate(), options: [])
+        dateView.text = formatterDate.stringFromDate(date!)
+        dateView.font = UIFont.systemFontOfSize(16)
+        dateView.textColor = UIColor.grayColor()
+        dateView.userInteractionEnabled = false
+        position += 44
+        day++
+        view.addSubview(dateView)
+        
     }
     
     func deleteAllSubViews() {
