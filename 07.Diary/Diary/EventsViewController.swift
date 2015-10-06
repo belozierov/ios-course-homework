@@ -6,7 +6,7 @@ class EventsViewController : UIViewController {
     @IBOutlet weak var switcher: UISegmentedControl!
 
     var width : CGFloat = 0
-    var count : CGFloat = 86
+    var count : CGFloat = 0
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -36,7 +36,7 @@ class EventsViewController : UIViewController {
         default : containerView.tintColor = UIColor.blackColor()
         }
         
-        let dateView = UITextView(frame: CGRectMake(0, -8, 80, 30))
+        let dateView = UITextView(frame: CGRectMake(0, -8, 80, 44))
         let formatterDate = NSDateFormatter()
         formatterDate.dateStyle = .ShortStyle
         dateView.text = formatterDate.stringFromDate(record.date)
@@ -56,32 +56,24 @@ class EventsViewController : UIViewController {
         moodView.tintColor = UIColor.blueColor()
         containerView.addSubview(moodView)
         
-        let titleView = UITextView(frame: CGRectMake(95, -8, width - 95, 40))
+        let titleView = UITextView(frame: CGRectMake(95, -8, width - 95, 44))
         titleView.text = record.title
         titleView.font = UIFont.systemFontOfSize(16)
         let newSize = titleView.sizeThatFits(CGSize(width: width - 95, height: CGFloat.max))
-        var newFrame = titleView.frame
-        newFrame.size = CGSize(width: max(newSize.width, width - 95), height: newSize.height)
-        titleView.frame = newFrame
+        titleView.frame.size = newSize
         titleView.userInteractionEnabled = false
         titleView.textColor = containerView.tintColor
         containerView.addSubview(titleView)
         
-        if newFrame.size.height > 44 {
-            containerView.frame = CGRectMake(8, y, width, newFrame.size.height)
-        }
-        count += containerView.frame.height
+        containerView.frame.size = CGSize(width: width, height: newSize.height)
+        count += newSize.height
         
         return containerView
     }
     
     func deleteAllSubViews() {
-        //var count = 0
         for subView in view.subviews {
-            //if count != 0 {
-                subView.removeFromSuperview()
-                count++
-            //}
+            subView.removeFromSuperview()
         }
     }
     
