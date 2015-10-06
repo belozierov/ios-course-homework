@@ -15,15 +15,16 @@ class EventsViewController : UIViewController {
     }
     
     override func viewWillAppear(animated: Bool) {
-        for subView in view.subviews {
-            subView.removeFromSuperview()
-        }
         count = 86
         for (_, section) in diary.database {
             for record in section {
                 view.addSubview(cellViewForRecord(record, withY: count))
             }
         }
+    }
+    
+    override func viewWillDisappear(animated: Bool) {
+        deleteAllSubViews()
     }
     
     func cellViewForRecord(record: Record, withY y: CGFloat) -> UIView {
@@ -74,8 +75,14 @@ class EventsViewController : UIViewController {
         return containerView
     }
     
-    
-    
-    
+    func deleteAllSubViews() {
+        var count = 0
+        for subView in view.subviews {
+            if count != 0 {
+                subView.removeFromSuperview()
+                count++
+            }
+        }
+    }
     
 }
