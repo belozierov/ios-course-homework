@@ -45,15 +45,14 @@ class EventsViewController : UIViewController {
         dateView.textColor = containerView.tintColor
         containerView.addSubview(dateView)
         
-        let moodRect = CGRectMake(70, 0, 20, 20)
-        let moodView = UIImageView(frame: moodRect)
+        let moodView = UIImageView(frame: CGRectMake(70, 0, 20, 20))
         switch record.mood {
         case 0 : moodView.image = UIImage(named: "sunny")
         case 1 : moodView.image = UIImage(named: "cloudy")
         case 2 : moodView.image = UIImage(named: "rain")
         default : break
         }
-        moodView.tintColor = UIColor.blueColor()
+        //moodView.tintColor = UIColor.blueColor()
         containerView.addSubview(moodView)
         
         let titleView = UITextView(frame: CGRectMake(95, -8, width - 95, 44))
@@ -73,7 +72,9 @@ class EventsViewController : UIViewController {
     
     func deleteAllSubViews() {
         for subView in view.subviews {
-            subView.removeFromSuperview()
+            if !subView.hidden {
+                subView.removeFromSuperview()
+            }
         }
     }
     
