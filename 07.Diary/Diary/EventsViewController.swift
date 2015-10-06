@@ -46,8 +46,11 @@ class EventsViewController : UIViewController {
             var index = 0
             while position < height {
                 let tempIndex = index
-                for i in index..<array.count {
-                    if array[i].date.dayFrom() == day {
+                for i in tempIndex..<array.count {
+                    let formatterDate = NSDateFormatter()
+                    formatterDate.dateStyle = .ShortStyle
+                    let date = NSCalendar.currentCalendar().dateByAddingUnit(.Day, value: -day, toDate: NSDate(), options: [])
+                    if formatterDate.stringFromDate(array[i].date) == formatterDate.stringFromDate(date!) {
                         let showDate = tempIndex == index ? true : false
                         cellViewForRecord(array[i], withY: position, showDate: showDate)
                         index++
