@@ -76,12 +76,12 @@ class EventsViewController : UIViewController {
     }
     
     func deleteAllSubViews() {
-        var count = 0
+        //var count = 0
         for subView in view.subviews {
-            if count != 0 {
+            //if count != 0 {
                 subView.removeFromSuperview()
                 count++
-            }
+            //}
         }
     }
     
