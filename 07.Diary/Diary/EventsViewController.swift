@@ -87,7 +87,7 @@ class EventsViewController : UIViewController {
         case 2 : moodView.image = UIImage(named: "rain")
         default : break
         }
-        //moodView.tintColor = UIColor.blueColor()
+        moodView.tintColor = containerView.tintColor
         containerView.addSubview(moodView)
         
         let titleView = UITextView(frame: CGRectMake(95, -8, width - 95, 44))
