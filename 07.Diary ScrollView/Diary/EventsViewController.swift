@@ -244,7 +244,7 @@ class EventsViewController : UIViewController, UIScrollViewDelegate {
     func cleanScrollView() {
         for i in scrollView!.subviews {
             if i.frame.origin.y + i.frame.height < scrollView!.contentOffset.y ||
-                i.frame.origin.y > scrollView!.contentOffset.y + height {
+                i.frame.origin.y > scrollView!.contentOffset.y + height, let _ = i as? UIImageView {
                     i.removeFromSuperview()
             }
         }
@@ -263,10 +263,9 @@ class EventsViewController : UIViewController, UIScrollViewDelegate {
             startLastCell = lastRecord!.frame.origin.y
             endLastCell = startLastCell + lastRecord!.frame.height
             let newLastCellInfo = (lastRecord!.subviews.last as! UITextView).text
-            let lastInfoArray = newLastCellInfo.characters.split {$0 == " "}.map(String.init)
+            let lastInfoArray = newLastCellInfo!.characters.split {$0 == " "}.map(String.init)
             endDayAgo = Int(lastInfoArray[0])!
             endIndexRecord = Int(lastInfoArray[1])!
-            
         }
         
         if startIndexRecord == 0 {
