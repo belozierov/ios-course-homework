@@ -68,7 +68,7 @@ class EventsViewController : UIViewController, UIScrollViewDelegate {
                 addCellLast(true)
             }
         } else {
-            while endLastCell < height - 60 && endIndexRecord != countRecords {
+            while endLastCell < height && endIndexRecord != countRecords {
                 addCellLast(true)
             }
             if endIndexRecord == countRecords {
@@ -151,17 +151,22 @@ class EventsViewController : UIViewController, UIScrollViewDelegate {
         var indexRecord = last ? endIndexRecord : startIndexRecord
         var outputRecord : Record?
         var dateShow = true
+        var addNewView = true
         let checkArray = indexRecord + direction >= 0 && indexRecord + direction < countRecords ? true : false
         
         func comparDatesInIndexAndDayAgo(dayAgo: Int) -> Bool {
-            let formatterDate = NSDateFormatter()
-            formatterDate.dateStyle = .ShortStyle
-            let dateOfIndex = arrayOfRecords[indexRecord + direction].date
-            let dateAgo =  NSCalendar.currentCalendar().dateByAddingUnit(.Day, value: -dayAgo, toDate: NSDate(), options: [])
-            return formatterDate.stringFromDate(dateOfIndex) == formatterDate.stringFromDate(dateAgo!)
+            if checkArray {
+                let formatterDate = NSDateFormatter()
+                formatterDate.dateStyle = .ShortStyle
+                let dateOfIndex = arrayOfRecords[indexRecord + direction].date
+                let dateAgo =  NSCalendar.currentCalendar().dateByAddingUnit(.Day, value: -dayAgo, toDate: NSDate(), options: [])
+                return formatterDate.stringFromDate(dateOfIndex) == formatterDate.stringFromDate(dateAgo!)
+            } else {
+                return false
+            }
         }
         
-        if checkArray && comparDatesInIndexAndDayAgo(dayAgo) {
+        if comparDatesInIndexAndDayAgo(dayAgo) {
             outputRecord = arrayOfRecords[indexRecord + direction]
             indexRecord += direction
             if last {
@@ -170,7 +175,7 @@ class EventsViewController : UIViewController, UIScrollViewDelegate {
             } else {
                 startIndexRecord += direction
             }
-        } else if checkArray && comparDatesInIndexAndDayAgo(dayAgo + direction) {
+        } else if comparDatesInIndexAndDayAgo(dayAgo + direction) {
             outputRecord = arrayOfRecords[indexRecord + direction]
             dayAgo += direction
             indexRecord += direction
@@ -190,14 +195,13 @@ class EventsViewController : UIViewController, UIScrollViewDelegate {
             }
         } else if checkArray {
             outputRecord = arrayOfRecords[indexRecord + direction]
-            indexRecord += direction
             let dayAgoTemp = outputRecord?.date.dayFrom()
             if comparDatesInIndexAndDayAgo(dayAgoTemp!) {
                 if last {
                     endIndexRecord += direction
                     endDayAgo = dayAgoTemp!
                 } else {
-                    startDayAgo += direction
+                    startIndexRecord += direction
                     startDayAgo = dayAgoTemp!
                 }
             } else {
@@ -205,28 +209,35 @@ class EventsViewController : UIViewController, UIScrollViewDelegate {
                     endIndexRecord += direction
                     endDayAgo = dayAgoTemp! + 1
                 } else {
-                    startDayAgo += direction
+                    startIndexRecord += direction
                     startDayAgo = dayAgoTemp! + 1
                 }
             }
-        }
-        
-        if startIndexRecord == 0 {
-            startIndexRecord += direction
-        }
-        if endIndexRecord + 1 == countRecords {
-            endIndexRecord += direction
-        }
-        
-        let view = cellViewForRecord(outputRecord, withY: endOfCell, showDate: dateShow, dayAgo: dayAgo, index: indexRecord)
-        if last {
-            startLastCell = view.frame.origin.y
-            endLastCell = startLastCell + view.frame.height
         } else {
-            startFirstCell = view.frame.origin.y
-            endFirstCell = startFirstCell + view.frame.height
+            addNewView = false
+            endScrollView = endLastCell
+            scrollView!.contentSize = CGSize(width: width, height: endScrollView)
         }
-        scrollView?.addSubview(view)
+        
+        
+        
+        if addNewView {
+            if startIndexRecord == 0 {
+                startIndexRecord += direction
+            }
+            if endIndexRecord + 1 == countRecords {
+                endIndexRecord += direction
+            }
+            let view = cellViewForRecord(outputRecord, withY: endOfCell, showDate: dateShow, dayAgo: dayAgo, index: indexRecord)
+            if last {
+                startLastCell = view.frame.origin.y
+                endLastCell = startLastCell + view.frame.height
+            } else {
+                startFirstCell = view.frame.origin.y
+                endFirstCell = startFirstCell + view.frame.height
+            }
+            scrollView?.addSubview(view)
+        }
     }
     
     func deleteAllSubViews() {
@@ -282,25 +293,28 @@ class EventsViewController : UIViewController, UIScrollViewDelegate {
             startDayAgo = Int(startInfoArray[0])!
             startIndexRecord = Int(startInfoArray[1])!
             
-            let lastRecord = sortedArray.last
-            startLastCell = lastRecord!.frame.origin.y
-            endLastCell = startLastCell + lastRecord!.frame.height
-            let newLastCellInfo = (lastRecord!.subviews.last as! UITextView).text
+            var count = 0
+            while (sortedArray[sortedArray.count - ++count].subviews.last as? UITextView) == nil {}
+            let lastRecord = sortedArray[sortedArray.count - count]
+            startLastCell = lastRecord.frame.origin.y
+            endLastCell = startLastCell + lastRecord.frame.height
+            let newLastCellInfo = (lastRecord.subviews.last as! UITextView).text
             let lastInfoArray = newLastCellInfo!.characters.split {$0 == " "}.map(String.init)
             endDayAgo = Int(lastInfoArray[0])!
             endIndexRecord = Int(lastInfoArray[1])!
         }
         
-        if startIndexRecord == 0 {
-            startIndexRecord--
-        }
-        if endIndexRecord + 1 == countRecords {
-            endIndexRecord++
-        }
-        
-        if scrollView!.contentOffset.y + height < endScrollView - 400 {
-            endScrollView = scrollView!.contentOffset.y + height + 400
-            scrollView!.contentSize = CGSize(width: width, height: endScrollView)
+        if segmentedControl == 0 || endLastCell != endScrollView {
+            if startIndexRecord == 0 {
+                startIndexRecord--
+            }
+            if endIndexRecord + 1 == countRecords {
+                endIndexRecord++
+            }
+            if scrollView!.contentOffset.y + height < endScrollView - 400 {
+                endScrollView = scrollView!.contentOffset.y + height + 400
+                scrollView!.contentSize = CGSize(width: width, height: endScrollView)
+            }
         }
     }
     
