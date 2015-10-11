@@ -219,8 +219,6 @@ class EventsViewController : UIViewController, UIScrollViewDelegate {
             scrollView!.contentSize = CGSize(width: width, height: endScrollView)
         }
         
-        
-        
         if addNewView {
             if startIndexRecord == 0 {
                 startIndexRecord += direction
